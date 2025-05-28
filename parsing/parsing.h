@@ -21,7 +21,7 @@
 #include "get_next_line.h"
 #include <fcntl.h>
 #include <stdio.h>
-#include "../src/mlx/mlx.h"
+// #include "../src/mlx/mlx.h"
 //parsing
 
 typedef struct s_parse
@@ -77,6 +77,9 @@ char **get_6_lines(void);
 int pars_extension(char *s, char *s2);
 int extension(char *s1, char **tab);
 int valid_trend(char **t);
+char **get_map_lines(int fd);
+void save_map_to_struct(t_game *data, char **map_lines);
+int is_map_surrounded(t_game *data);
 
 //libft
 

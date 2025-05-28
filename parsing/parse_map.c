@@ -70,34 +70,34 @@ void save_map_to_struct(t_game *data, char **map_lines)
     }
 	data->map[i] = NULL;
 }
-int is_map_surrounded(t_game *data)
+int	is_map_surrounded(t_game *game)
 {
-	int i ;
-	int j;
+	int	i, j;
+	char	**map = game->map;
 
-	i = 0;
-	while (i < data->map_height)
+	for (i = 0; i < game->map_height; i++)
 	{
-		j = 0;
-		while (j < data->map_width)
+		for (j = 0; j < game->map_width; j++)
 		{
-			char c = data->map[i][j];
+			char c = map[i][j];
 			if (c == '0' || ft_strchr("NSEW", c))
 			{
-				if (i == 0 || j == 0 || i == data->map_height - 1 || j == data->map_width - 1)
-					return (0); 
-				if (data->map[i - 1][j] == ' ' ||
-					data->map[i + 1][j] == ' ' ||
-					data->map[i][j - 1] == ' ' ||
-					data->map[i][j + 1] == ' ')
-					return (0); 
+				// Si on est en bord de map ou si voisin inexistant ou ' '
+				if (
+					i == 0 || j == 0 ||
+					i >= game->map_height - 1 || j >= game->map_width - 1 ||
+					map[i - 1][j] == ' ' || map[i + 1][j] == ' ' ||
+					map[i][j - 1] == ' ' || map[i][j + 1] == ' ' ||
+					map[i - 1][j] == '\0' || map[i + 1][j] == '\0' ||
+					map[i][j - 1] == '\0' || map[i][j + 1] == '\0'
+				)
+					return (0);
 			}
-			j++;
 		}
-		i++;
 	}
-	return (1); 
+	return (1);
 }
+
 
 
 // int main(void)

@@ -9,7 +9,6 @@ int get_f_c(t_parse *d, char *s)
     i = 0;
     j = 0;
     tab = get_6_lines();
-    
     if (!tab)
         return (write(2,"Failed to read lines\n", 21), 1);
     if(extension(s, tab))

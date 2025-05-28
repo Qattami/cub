@@ -51,6 +51,7 @@ char **get_6_lines(void)
     fd = open("../maps/map.cub", O_RDONLY);
     if (fd < 0)
         return NULL;
+
     while(1)
     {
         line = get_next_line(fd);
@@ -67,6 +68,7 @@ char **get_6_lines(void)
         if (i == 6)
             break;
     }
+    close(fd);
     t[6] = NULL;
     return t;
 }
@@ -111,30 +113,63 @@ int valid_trend(char **t)
     }
     return(existe(tl));
 }
-// int main(int ac, char **av)
-// {
-//     t_parse *data;
-//     // int i;
-//     // char **t;
-//     (void) ac;
-   
+int main()
+{
+    t_parse *data;
+    data = malloc(sizeof(t_parse));
+    data->next = malloc(sizeof(t_parse));
+    if(!get_f_c(data, "../maps/map.cub"))
+        printf("RGB stored===>: R=%d G=%d B=%d\n", data->r, data->g, data->b);    
+    int fd = open("../maps/map.cub", O_RDONLY);
+	if (fd < 0)
+    {
+        return (perror("open failed"), 1);
+    }
+	printf("%d\n", fd);
 
-//     data = malloc(sizeof(t_parse));
-//     if (!data)
-//         return (1);
-//     data->next = malloc(sizeof(t_parse)); // <-- ADD THIS
-//     if (!data->next)
-//     {
-//         free(data);
-//         return 1;
-//     }
-    
-//     // if (valid_trend(t) == 1)
-//     //     return 1;
-    
-//     if(!get_f_c(data, av[1]))
-//         printf("RGB stored: R=%d G=%d B=%d\n", data->r, data->g, data->b);    
-//     free(data);
-//     free(data->next);
-//     return 0;
-// }
+	t_game *map = malloc(sizeof(t_game));
+	if (!map)
+		return (perror("malloc failed"), 1);
+
+	char **map_lines = get_map_lines(fd);
+    int i = 0, j;
+    while(map_lines[i])
+    {
+        j = 0;
+        while(map_lines[i][j])
+            printf("%c", map_lines[i][j++]);
+        i++;
+        printf("\n");
+    }
+	if (!map_lines)
+		return (printf("Failed to read map\n"), 1);
+
+	save_map_to_struct(map, map_lines);
+	free_tab(map_lines);
+
+	printf("Map size: %dx%d\n", map->map_width, map->map_height);
+
+
+	if (!is_map_surrounded(map))
+		printf("Map not closed by walls!\n");
+	else
+		printf("Map is valid.\n");
+	// int i = 0, j;
+	// while (map->map[i])
+	// {
+	// 	j = 0;
+	// 	while (map->map[i][j])
+	// 	{
+	// 		printf("%c", map->map[i][j]);
+	// 		j++;
+	// 	}
+	// 	printf("\n");
+	// 	i++;
+	// }
+    close(fd);
+	free_tab(map->map);
+    free(data->next);
+    free(data);
+    free(map);
+    return 0;
+}
