@@ -39,7 +39,7 @@ char **get_map_lines(int fd)
 	return map;
 }
 
-void save_map_to_struct(t_game *data, char **map_lines)
+void save_map_to_struct(t_map *data, char **map_lines)
 {
 	int i , max_width, len, j;
 
@@ -70,76 +70,93 @@ void save_map_to_struct(t_game *data, char **map_lines)
     }
 	data->map[i] = NULL;
 }
-int	is_map_surrounded(t_game *game)
+int is_valid_tile(char c)
 {
-	int	i, j;
-	char	**map = game->map;
-
-	for (i = 0; i < game->map_height; i++)
-	{
-		for (j = 0; j < game->map_width; j++)
-		{
-			char c = map[i][j];
-			if (c == '0' || ft_strchr("NSEW", c))
-			{
-				// Si on est en bord de map ou si voisin inexistant ou ' '
-				if (
-					i == 0 || j == 0 ||
-					i >= game->map_height - 1 || j >= game->map_width - 1 ||
-					map[i - 1][j] == ' ' || map[i + 1][j] == ' ' ||
-					map[i][j - 1] == ' ' || map[i][j + 1] == ' ' ||
-					map[i - 1][j] == '\0' || map[i + 1][j] == '\0' ||
-					map[i][j - 1] == '\0' || map[i][j + 1] == '\0'
-				)
-					return (0);
-			}
-		}
-	}
-	return (1);
+    return (c == '0' || ft_strchr("NSEW", c));
 }
 
+int is_valid_char(char c)
+{
+    return (c == '0' || c == '1' || c == ' ' || ft_strchr("NSEW", c));
+}
 
+int is_map_surrounded(t_map *data)
+{
+    int i;
+	int j;
 
-// int main(void)
+    for (i = 0; i < data->map_height; i++)
+    {
+        for (j = 0; j < data->map_width; j++)
+        {
+            char c = data->map[i][j];
+            if (!is_valid_char(c))
+                return (write(1, "Invalid character\n", 18), 0);
+            if (is_valid_tile(c))
+            {
+                if (i == 0 || j == 0 || i == data->map_height - 1 || j == data->map_width - 1)
+                    return (write(1, "Open edge\n", 10),0);
+                if (data->map[i - 1][j] == ' ' || data->map[i + 1][j] == ' ' ||
+                    data->map[i][j - 1] == ' ' || data->map[i][j + 1] == ' ')
+                    return (write(1, "Open space\n", 11), 0);
+            }
+        }
+    }
+    return 1;
+}
+int double_char(t_map *data)
+{
+	int i = 0, j;
+	int count = 0;
+
+	while (data->map[i])
+	{
+		j = 0;
+		while (data->map[i][j])
+		{
+			if (data->map[i][j] == 'N' || data->map[i][j] == 'S' ||
+				data->map[i][j] == 'E' || data->map[i][j] == 'W')
+				count++;
+			j++;
+		}
+		i++;
+	}
+	if (count != 1)
+		return(write(1, "Invalid number of direction characters\n", 39), 0);
+	return 1;
+}
+
+t_map *get_data(char *s, t_map *data)
+{
+	int fd = open(s, O_RDONLY);
+	if (fd < 0)
+		return (perror("open failed"), NULL);
+
+	data = malloc(sizeof(t_map));
+	if (!data)
+		return (perror("malloc failed"), NULL);
+
+	char **map_lines = get_map_lines(fd);
+	if (!map_lines)
+		return (printf("Failed to read map\n"), NULL);
+
+	save_map_to_struct(data, map_lines);
+	free_tab(map_lines);
+	if(double_char(data) == 0 || is_map_surrounded(data) == 0)
+			return (write(1, "Invalid map\n", 12), NULL);
+	return(data);
+}
+
+// int main(int ac, char **av)
 // {
-// 	int fd = open("../maps/map.cub", O_RDONLY);
-// 	if (fd < 0)
-// 		return (perror("open failed"), 1);
-
-// 	t_game *data = malloc(sizeof(t_map));
-// 	if (!data)
-// 		return (perror("malloc failed"), 1);
-
-// 	char **map_lines = get_map_lines(fd);
-// 	if (!map_lines)
-// 		return (printf("Failed to read map\n"), 1);
-
-// 	save_map_to_struct(data, map_lines);
-// 	free_tab(map_lines);
-
-// 	printf("Map size: %dx%d\n", data->map_width, data->map_height);
-
-
-// 	if (!is_map_surrounded(data))
-// 		printf("Map not closed by walls!\n");
-// 	else
-// 		printf("Map is valid.\n");
-// 	int i = 0, j;
-// 	while (data->map[i])
-// 	{
-// 		j = 0;
-// 		while (data->map[i][j])
-// 		{
-// 			printf("%c", data->map[i][j]);
-// 			j++;
-// 		}
-// 		printf("\n");
-// 		i++;
-// 	}
-// 	printf("Done\n");
-
-// 	free_tab(data->map);
-// 	free(data);
+// 	(void) ac;
+// 	t_map *da;
+// 	da = NULL;
+// 	da = get_data(av[1], da);
+// 	if(!da)
+// 		return(write(1, "ERROR\n", 6), 1);
+// 	free_tab(da->map);
+// 	free(da);
 // 	return 0;
 // }
 

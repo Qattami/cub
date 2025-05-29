@@ -43,8 +43,6 @@ char **colors_RGB(char *line)
             return(free_tab(table), write(2, "Invalide RGB\n", 13),NULL);
         i++;
     }
-    if(i < 3)
-        return(free_tab(table), write(2, "Invalide RGB\n", 13),NULL);
     return table;
 }
 
@@ -65,7 +63,7 @@ int store_RGB(char *c, char *s, t_parse *d)
     t = colors_RGB(s);
     l = colors_RGB(c);
     if(!t || !l)
-        return (free_tab(t), free_tab(l), 1);
+        return 1;
     d->r = ft_atoi(t[0]);
     d->g = ft_atoi(t[1]);
     d->b = ft_atoi(t[2]);

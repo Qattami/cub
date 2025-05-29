@@ -15,13 +15,14 @@
 
 # define PI 3.14159265359
 
+#include "get_next_line.h"
+#include "../mlx/mlx.h"
+#include <fcntl.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <math.h>
-#include "get_next_line.h"
-#include <fcntl.h>
-#include <stdio.h>
-// #include "../src/mlx/mlx.h"
+
 //parsing
 
 typedef struct s_parse
@@ -32,6 +33,13 @@ typedef struct s_parse
     int b;
     struct s_parse *next;
 }t_parse;
+
+typedef struct s_map
+{
+	char **map;
+	int map_width;
+	int map_height;
+}	t_map;
 
 typedef struct s_player
 {
@@ -59,27 +67,15 @@ typedef struct s_game
     int size_line;
     int endian;
     t_player player;
-
     char **map;
-    	int map_width;
-	int map_height;
 } t_game;
-
-void init_player(t_player *player);
-int key_release(int keycode, t_player *player);
-int key_press(int keycode, t_player *player);
-void move_player(t_player *player);
 
 int store_RGB(char *c, char *s, t_parse *d);
 void free_tab(char **t);
-int get_f_c(t_parse *d, char *s);
+int get_f_c(t_parse *d);
 char **get_6_lines(void);
-int pars_extension(char *s, char *s2);
-int extension(char *s1, char **tab);
+t_map *get_data(char *s, t_map *data);
 int valid_trend(char **t);
-char **get_map_lines(int fd);
-void save_map_to_struct(t_game *data, char **map_lines);
-int is_map_surrounded(t_game *data);
 
 //libft
 
@@ -90,6 +86,19 @@ int	ft_atoi(const char *str);
 int	ft_strncmp(const char *s1, const char *s2, size_t n);
 void	*ft_memset(void *s, int c, size_t n);
 void	*ft_memcpy(void *dest, const void *src, size_t n);
+void init_player(t_player *player);
+int key_release(int keycode, t_player *player);
+int key_press(int keycode, t_player *player);
+void move_player(t_player *player);
+int draw_loop(t_game *game);
+void draw_line(t_player *player, t_game *game, float start_x, int i);
+void init_game(t_game *game, t_map *map);
+bool touch(float px, float py, t_game *game);
+float fixed_dist(float x1, float y1, float x2, float y2, t_game *game);
+float distance(float x, float y);
+void draw_map(t_game *game);
+void draw_square(int x, int y, int size, int color, t_game *game);
+void clear_image(t_game *game);
+void put_pixel(int x, int y, int color, t_game *game);
+
 #endif
-
-
