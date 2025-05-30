@@ -15,6 +15,9 @@
 
 # define PI 3.14159265359
 
+#define ESC 65307
+
+
 #include "get_next_line.h"
 #include "../mlx/mlx.h"
 #include <fcntl.h>
@@ -40,6 +43,19 @@ typedef struct s_map
 	int map_width;
 	int map_height;
 }	t_map;
+
+typedef struct s_textures {
+    void *no_img;
+    void *so_img;
+    void *we_img;
+    void *ea_img;
+    int width;
+    int height;
+    char *no_path;
+    char *so_path;
+    char *we_path;
+    char *ea_path;
+} t_textures;
 
 typedef struct s_player
 {
@@ -67,12 +83,13 @@ typedef struct s_game
     int size_line;
     int endian;
     t_player player;
+    t_textures textures;
     char **map;
 } t_game;
 
 int store_RGB(char *c, char *s, t_parse *d);
 void free_tab(char **t);
-int get_f_c(t_parse *d);
+int get_f_c(t_parse *d, t_game *game);
 char **get_6_lines(void);
 t_map *get_data(char *s, t_map *data);
 int valid_trend(char **t);
@@ -89,7 +106,8 @@ void	*ft_memcpy(void *dest, const void *src, size_t n);
 void init_player(t_player *player);
 int key_release(int keycode, t_player *player);
 int key_press(int keycode, t_player *player);
-void move_player(t_player *player);
+// void move_player(t_player *player);
+void move_player(t_player *player, t_game *game);
 int draw_loop(t_game *game);
 void draw_line(t_player *player, t_game *game, float start_x, int i);
 void init_game(t_game *game, t_map *map);

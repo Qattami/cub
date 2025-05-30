@@ -65,13 +65,14 @@ char **get_6_lines(void)
         free(line);
         if (i == 6)
             break;
+        
     }
     t[i] = NULL;
     close(fd);
+    if(i < 6)
+        return NULL;
     return t;
 }
-
-
 
 int existe(int *t)
 {
@@ -93,7 +94,8 @@ int valid_trend(char **t)
     ft_bzero(tl, 5);
 
     i = 0;
-   
+       
+
     while(i < 6)
     {
         if(t[i][0] == 'S' && t[i][1] == 'O' )
@@ -104,22 +106,18 @@ int valid_trend(char **t)
             tl[2] = 1;
         else if(t[i][0] == 'E' && t[i][1] == 'A' )
             tl[3] = 1;
-        else if((!ft_strncmp(t[i], "C ", 2) && !ft_strncmp(t[i + 1] ,"F ", 2)) || (!ft_strncmp(t[i], "F ", 2) && !ft_strncmp(t[i + 1] ,"C ", 2)))
-            {   
-                printf("TANIYAaaaaaa\n");
-
+        else if (i < 5 && ((!ft_strncmp(t[i], "C ", 2) && !ft_strncmp(t[i + 1], "F ", 2)) ||
+                (!ft_strncmp(t[i], "F ", 2) && !ft_strncmp(t[i + 1], "C ", 2))))
                 tl[4] = 1;
-            }
+
          
         i++;
     }
-    i = 0;
     
-    while(i < 5)
-        printf("%d\n", tl[i++]);
     return(existe(tl));
 }
-t_parse *get_pars(t_parse *pars)
+
+t_parse *get_pars(t_parse *pars, t_game *game)
 {
     pars = malloc(sizeof(t_parse));
     if (!pars)
@@ -130,8 +128,10 @@ t_parse *get_pars(t_parse *pars)
         free(pars);
         return NULL;
     }
-    if(!get_f_c(pars))
+    if(!get_f_c(pars ,game))
         printf("RGB stored: R=%d G=%d B=%d\n", pars->r, pars->g, pars->b);
+    else
+        return (free(pars->next), free(pars), NULL);
     printf("RGB stored: R=%d G=%d B=%d\n", pars->next->r, pars->next->g, pars->next->b);
     return(pars);
 }
@@ -143,26 +143,19 @@ int main(int ac, char **av)
     t_map *da;
 	da = NULL;
     pars = NULL;
-    pars = get_pars(pars);
+    pars = get_pars(pars, &game);
     if(!pars)
-    {
-        free(pars);
-        free(pars->next);
         return(write(1, "ERROR\n", 6), 1);
-    }
-	da = get_data(av[1], da);
+    da = get_data(av[1], da);
 	if(!da)
-    {
-        free_tab(da->map);
-        free(da);
         return(write(1, "ERROR1\n", 7), 1);
-    }
-    init_game(&game, da);
+    init_game(&game, da); 
     mlx_hook(game.win, 2, 1L<<0, key_press, &game.player);
     mlx_hook(game.win, 3, 1L<<1, key_release, &game.player);
     mlx_loop_hook(game.mlx, draw_loop, &game);
     mlx_loop(game.mlx);
 	free_tab(da->map);
+   
     free(da);
     free(pars);
     free(pars->next);
