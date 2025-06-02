@@ -12,7 +12,6 @@
 
 #include "parsing.h"
 
-
 char	*ft_strduup(const char *s)
 {
 	char	*p;

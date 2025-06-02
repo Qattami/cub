@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: iqattami <iqattami@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/02 03:37:08 by iqattami          #+#    #+#             */
+/*   Updated: 2025/06/02 03:37:39 by iqattami         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h>
@@ -50,8 +61,8 @@ int	ft_addback(t_list **lst, char *buff)
 
 char	*helper(t_list **lst, int fd)
 {
-	char			*buff;
-	ssize_t			bytesread;
+	char	*buff;
+	ssize_t	bytesread;
 
 	while (1)
 	{
@@ -75,7 +86,7 @@ char	*helper(t_list **lst, int fd)
 
 char	*get_next_line(int fd)
 {
-	static t_list	*lst;	
+	static t_list	*lst;
 
 	if (fd < 0 || fd > 1023 || BUFFER_SIZE <= 0 || BUFFER_SIZE > 0xffffffff
 		|| (read(fd, NULL, 0)) < 0)

@@ -1,21 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isdigit.c                                       :+:      :+:    :+:   */
+/*   helper0.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: imane <imane@student.42.fr>                +#+  +:+       +#+        */
+/*   By: iqattami <iqattami@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/31 20:45:35 by iqattami          #+#    #+#             */
-/*   Updated: 2025/05/22 23:50:42 by imane            ###   ########.fr       */
+/*   Created: 2025/06/02 03:04:40 by iqattami          #+#    #+#             */
+/*   Updated: 2025/06/02 03:38:00 by iqattami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
 
-int	ft_isdigit(int c)
+void	init_var(t_map *data)
 {
-	if (c <= '9' && c >= '0')
-		return (0);
-	else
-		return (1);
+	data->count = 0;
+	data->i = 0;
+	data->j = 0;
 }
