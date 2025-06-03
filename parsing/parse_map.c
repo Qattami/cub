@@ -6,7 +6,7 @@
 /*   By: iqattami <iqattami@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 03:19:21 by iqattami          #+#    #+#             */
-/*   Updated: 2025/06/02 03:31:32 by iqattami         ###   ########.fr       */
+/*   Updated: 2025/06/03 15:38:14 by iqattami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,6 @@ t_map	*get_data(char *s, t_map *data)
 	save_map_to_struct(data, map_lines);
 	free_tab(map_lines);
 	if (double_char(data) == 0 || is_map_surrounded(data) == 0)
-		return (write(1, "Invalid map\n", 12), NULL);
+		return (free_map_data(data),write(1, "Invalid map\n", 12), NULL);
 	return (data);
 }

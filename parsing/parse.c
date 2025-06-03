@@ -6,7 +6,7 @@
 /*   By: iqattami <iqattami@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 03:38:37 by iqattami          #+#    #+#             */
-/*   Updated: 2025/06/02 03:44:33 by iqattami         ###   ########.fr       */
+/*   Updated: 2025/06/03 16:40:53 by iqattami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,9 +98,7 @@ t_parse	*get_pars(t_parse *pars, t_game *game)
 		free(pars);
 		return (NULL);
 	}
-	if (!get_f_c(pars, game))
-		printf("RGB stored: R=%d G=%d B=%d\n", pars->r, pars->g, pars->b);
-	else
+	if (get_f_c(pars, game))
 		return (free(pars->next), free(pars), NULL);
 	printf("RGB stored: R=%d G=%d B=%d\n", pars->next->r, pars->next->g,
 		pars->next->b);
