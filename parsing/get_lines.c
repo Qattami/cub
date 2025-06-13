@@ -6,7 +6,7 @@
 /*   By: iqattami <iqattami@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 03:42:18 by iqattami          #+#    #+#             */
-/*   Updated: 2025/06/03 16:08:58 by iqattami         ###   ########.fr       */
+/*   Updated: 2025/06/13 02:08:17 by iqattami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ char	**get_6_lines(void)
 		return (free_tab(t), NULL);
 	return (t);
 }
+
 int	main(int ac, char **av)
 {
 	t_parse	*pars;
@@ -103,13 +104,5 @@ int	main(int ac, char **av)
 	mlx_hook(game.win, 3, 1L << 1, key_release, &game.player);
 	mlx_loop_hook(game.mlx, draw_loop, &game);
 	mlx_loop(game.mlx);
-	// free_tab(da->map);
-	// free(da);
-	// free(pars);
-	// free(pars->next);
-	// free_map_data(da);
-	// mlx_destroy_window(game.mlx, game.win);
-	// free_textures(&game.textures, &game);
-	cleanup_game(&game, da, pars);
 	return (0);
 }

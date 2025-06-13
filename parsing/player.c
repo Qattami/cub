@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: iqattami <iqattami@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/02 03:46:06 by iqattami          #+#    #+#             */
-/*   Updated: 2025/06/03 16:55:28 by iqattami         ###   ########.fr       */
+/*   Created: 2025/06/11 22:21:42 by ozouine           #+#    #+#             */
+/*   Updated: 2025/06/13 02:15:41 by iqattami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,11 +70,19 @@ int	key_release(int keycode, t_player *player)
 	return (0);
 }
 
-void	update_angle(t_player *player)
+void	move_player(t_player *player, t_game *game)
 {
+	int		speed;
 	float	angle_speed;
+	float	cos_angle;
+	float	sin_angle;
+	float	new_x;
+	float	new_y;
 
-	angle_speed = 0.03;
+	speed = 4;
+	angle_speed = 0.045;
+	cos_angle = cos(player->angle);
+	sin_angle = sin(player->angle);
 	if (player->left_rotate)
 		player->angle -= angle_speed;
 	if (player->right_rotate)
@@ -83,4 +91,44 @@ void	update_angle(t_player *player)
 		player->angle = 0;
 	if (player->angle < 0)
 		player->angle = 2 * PI;
+	if (player->key_up)
+	{
+		new_x = player->x + cos_angle * speed;
+		new_y = player->y + sin_angle * speed;
+		if (!touch(new_x, new_y, game))
+		{
+			player->x = new_x;
+			player->y = new_y;
+		}
+	}
+	if (player->key_down)
+	{
+		new_x = player->x - cos_angle * speed;
+		new_y = player->y - sin_angle * speed;
+		if (!touch(new_x, new_y, game))
+		{
+			player->x = new_x;
+			player->y = new_y;
+		}
+	}
+	if (player->key_left)
+	{
+		new_x = player->x + sin_angle * speed;
+		new_y = player->y - cos_angle * speed;
+		if (!touch(new_x, new_y, game))
+		{
+			player->x = new_x;
+			player->y = new_y;
+		}
+	}
+	if (player->key_right)
+	{
+		new_x = player->x - sin_angle * speed;
+		new_y = player->y + cos_angle * speed;
+		if (!touch(new_x, new_y, game))
+		{
+			player->x = new_x;
+			player->y = new_y;
+		}
+	}
 }
